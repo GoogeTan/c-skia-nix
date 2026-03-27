@@ -62,11 +62,11 @@
           dontUnpack = true;
 
           installPhase = ''
-            mkdir -p $out/include $out/lib
+            mkdir -p $out/include/c $out/lib
             
             # 1. Extract and copy C headers
             # fetchFromGitHub gives a directory, no need to unzip
-            cp -r $srcHeaders/include/c/* $out/include/
+            cp -r $srcHeaders/include/c/* $out/include/c
             
             # 2. Extract NuGet package and copy the compiled native library
             # Path structure in NuGet: runtimes/<RID>/native/libSkiaSharp.<EXT>
@@ -99,8 +99,8 @@
 
           shellHook = ''
             # Export paths for sn-bindgen and build tools
-            export C_INCLUDE_PATH="${skia-c-api}/include''${C_INCLUDE_PATH:+:}$C_INCLUDE_PATH"
-            export CPLUS_INCLUDE_PATH="${skia-c-api}/include''${CPLUS_INCLUDE_PATH:+:}$CPLUS_INCLUDE_PATH"
+            export C_INCLUDE_PATH="${skia-c-api}/include/c/''${C_INCLUDE_PATH:+:}$C_INCLUDE_PATH"
+            export CPLUS_INCLUDE_PATH="${skia-c-api}/include/c/''${CPLUS_INCLUDE_PATH:+:}$CPLUS_INCLUDE_PATH"
             export LIBRARY_PATH="${skia-c-api}/lib''${LIBRARY_PATH:+:}$LIBRARY_PATH"
 
             # Set dynamic library paths based on platform
@@ -111,7 +111,7 @@
             fi
 
             echo "SkiaSharp C API environment loaded."
-            echo "Headers: ${skia-c-api}/include"
+            echo "Headers: ${skia-c-api}/include/c/"
             echo "Library: ${skia-c-api}/lib"
           '';
         };
